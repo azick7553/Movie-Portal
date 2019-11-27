@@ -1,0 +1,47 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model IPagedList<MovieMVC.DAL.Movy>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Фильмы</h2>
+@foreach (var movie in Model)
+{
+    <div class="row center-block" style="margin:0 auto">
+        <div class="col-md-7">
+            <div class="thumbnail">
+                @{
+                    var imgSrc = movie.Poster != null ? String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(movie.Poster)) : null;
+                }
+                @if (imgSrc != null)
+                {
+                    <img style="object-fit:cover" class="embed-responsive-item img-rounded img-responsive" src="@imgSrc" alt="Poster">
+                }
+                else
+                {
+                    <img class="img-rounded img-responsive" src="~/img/no-image.jpg" alt="No image">
+                }
+                <div class="caption">
+                    <h3>@movie.Title</h3>
+                    <p>@movie.Description</p>
+                    <p>@Html.ActionLink("Подробнее", "MovieDetails", new { id = movie.Id }, new { @class = "btn btn-default", role = "button" })</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+        Страница @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) из @Model.PageCount
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+     new PagedListRenderOptions()
+     {
+         LinkToFirstPageFormat = "|<",
+         LinkToLastPageFormat = ">|",
+         LinkToPreviousPageFormat = "<",
+         LinkToNextPageFormat = ">",
+         Display = PagedListDisplayMode.IfNeeded,
+         ContainerDivClasses = new List<string>(){ "pagination-container", "card-footer", "text-center" }
+     }
+       )

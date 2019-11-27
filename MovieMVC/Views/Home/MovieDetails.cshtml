@@ -1,0 +1,52 @@
+﻿@model MovieMVC.DAL.Movy
+
+@{
+    ViewBag.Title = Model.Title;
+}
+
+<h2>@ViewBag.Title</h2>
+<style>
+    .span4 img {
+        margin-right: 10px;
+    }
+
+    .span4 .img-left {
+        float: left;
+    }
+
+    .span4 .img-right {
+        float: right;
+    }
+</style>
+<div>
+    <hr />
+    <div class="block">
+        <div class="row">
+            <div class="span4">
+                @{
+                    var imgSrc = Model.Poster != null ? String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Poster)) : null;
+                }
+                @if (imgSrc != null)
+                {
+                    <img style="object-fit:cover; max-width:640px" class="embed-responsive-item img-left img-responsive img-rounded" src="@imgSrc" alt="Poster">
+                }
+                else
+                {
+                    <img class="img-left img-responsive img-rounded" src="~/img/no-image.jpg" alt="No image">
+                }
+                <p><b>Год выпуска:</b> @Model.Year</p>
+                <p><b>Режисёр:</b> @Model.Producer</p>
+                <div class="content-heading"><h3>Описание: &nbsp </h3></div>
+                <p>@Model.Description</p>
+            </div>
+        </div>
+    </div>
+</div>
+<hr />
+<p>
+    <b>Автор: </b>@Model.User.Email
+</p>
+<p>
+    @Html.ActionLink("Редактировать", "MovieEdit", new { id = Model.Id }) |
+    @Html.ActionLink("Назад к списку", "Index")
+</p>
